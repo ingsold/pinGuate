@@ -12,4 +12,3 @@ require 'utils/helper.php';
 $appBaseUrl =   "http://localhost:63342/pinGuate/";
 
 $LOGIN_UI = 0;
-

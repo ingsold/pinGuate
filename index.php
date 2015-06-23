@@ -22,11 +22,32 @@ switch($task){
     case 'login':
         if( \triagens\ArangoDb\authenticate($connection, $_REQUEST['username'], $_REQUEST['password'])){
             header("Location: ". $appBaseUrl.'index.php?task=home');
-        }
+        }else
+            echo "no esta registrado";
+        break;
+
+    case 'logout':
+        session_start();
+        session_destroy();
+        header("Location: ". $appBaseUrl.'index.php');
         break;
 
     case 'home':
+
+           // $arrayImages = \triagens\ArangoDb\getImages();
+
             include 'ui/home.php';
+        break;
+
+    case 'userBoard':
+        include 'ui/userHome.php';
+        break;
+
+    case 'addBoard':
+
+        //$arrayImages = \triagens\ArangoDb\getImages();
+
+        include 'ui/addBoard.php';
         break;
 
     default:
