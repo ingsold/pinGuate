@@ -200,7 +200,8 @@ a:hover {text-decoration: underline; color: red;}
 /* user Board*/
 #top_user{
     height: auto;
-    float: left;width: 100%;
+    float: left;
+    width: 100%;
     text-align: center;
 }
 
@@ -209,4 +210,10 @@ a:hover {text-decoration: underline; color: red;}
     height: auto;
     width: 100%;
     text-align: center;
+}
+
+#listBoards{
+    float: left;
+    height: auto;
+    width: 100%;
 }

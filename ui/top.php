@@ -1,7 +1,8 @@
 <div id="top_center_left">
 
     <div id="img_icon">
-        <img src="ui/images/pinterest_icon.png" width="50px" height="50px"/>
+       <a href="index.php"> <img src="ui/images/pinterest_icon.png" width="50px" height="50px"/>
+       </a>
     </div>
     <div id="searchDiv" class="">
         <div class="container-4">
