@@ -18,7 +18,7 @@
     </div>
     <div id="userDiv" align="center">
         <img src="ui/images/pin.png" width="25px" height="25px" />
-        <a href="index.php?task=userBoard&uid=<?=$_SESSION['uid']?>"> Rodrigo </a>
+        <a href="index.php?task=userBoard&uid=<?=$_SESSION['uid']?>"> <?=$_SESSION['name']?> </a>
     </div>
 
 </div>

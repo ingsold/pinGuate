@@ -68,3 +68,27 @@ a.button.icon.add_image span{
     background: url(../images/add-item.png) no-repeat 0 -4px;
     display: inline-block;
 }
+
+a.button.icon.follow_user span{
+    padding-left: 36px;
+    background: url(../images/agent.png) no-repeat 0 -4px;
+    display: inline-block;
+}
+
+a.button.icon.follow_board span{
+    padding-left: 36px;
+    background: url(../images/lookup.png) no-repeat 0 -4px;
+    display: inline-block;
+}
+
+a.button.icon.edit_board span{
+    padding-left: 36px;
+    background: url(../images/edit.png) no-repeat 0 -4px;
+    display: inline-block;
+}
+
+a.button.icon.user_follow span{
+    padding-left: 36px;
+    background: url(../images/happy-face.png) no-repeat 0 -4px;
+    display: inline-block;
+}

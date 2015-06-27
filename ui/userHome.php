@@ -33,6 +33,14 @@ session_start();
                     width: 500
                 });
 
+                $("#user_follows").dialog({
+                    autoOpen: false,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    draggable: true,
+                    width: 500
+                });
+
                 $("#add_board").click(function(){
                     $("#form_add_board" ).dialog("open");
                 });
@@ -40,6 +48,13 @@ session_start();
                 $("#add_pin").click(function(){
                     $("#form_add_pin" ).dialog("open");
                 });
+
+                $("#show_user_follow").click(function(){
+                    $("#user_follows" ).dialog("open");
+                });
+
+                //adBoard
+
             });
         </script>
 
@@ -58,50 +73,87 @@ session_start();
     <img src="ui/images/pin_user.png" width="75px" height="75px"/>
     <br />
     <br />
-    Rodrigo L&oacute;pez
+   <?=$userinfo[0]->get('username')?>
 
 </div>
-
+<?php
+    if($userinfo[0]->get('user_id') == $_SESSION['uid']){
+?>
 <div id="menu_buttons">
 
     <a id="add_board" class="button icon board" href="#"><span>A&ntilde;adir Tablero</span></a>
     <a id="add_pin" class="button icon add_image" href="#"><span>A&ntilde;adir Pin</span></a>
-
+    <a id="show_user_follow" class="button icon user_follow" href="#"><span>A qui&eacute;n sigo?</span></a>
 </div>
+
+<?php
+    }
+?>
 
 <div id="listBoards">
     <hr />
     <br />
-
     <div id="columns">
+    <?php
+    //echo 'COUNT: '.count($boards);
+    if(count($boards) > 0){
+
+    foreach($boards as $board){
+
+        $images = \triagens\ArangoDb\getImagesByBoard($connection, $board->get('board_id'));
+
+        //var_dump($images);
+
+        $rutas = array();
+
+        foreach($images as $image){
+            $rutas[] = $image->get('ruta');
+        }
+    ?>
     <div class="pin">
-        <div style="float: left; width: 150px; height: 150px;
-         background-image: url('http://cssdeck.com/uploads/media/items/2/2v3VhAp.png'); border:1px solid; margin: 5px;">
-            </div>
-            <div style="float: left; width: 40px; height: 50px;
-         background-image: url('http://cssdeck.com/uploads/media/items/1/1swi3Qy.png');
-         border:1px solid; margin: 5px;">
-            </div>
-                <div style="float: left; width: 40px; height: 50px;
-         background-image: url('http://cssdeck.com/uploads/media/items/2/2v3VhAp.png');
-         border:1px solid; margin: 5px;">
-                </div>
-                    <div style="float: left; width: 40px; height: 50px;
-         background-image: url('http://cssdeck.com/uploads/media/items/2/2v3VhAp.png');
-         border:1px solid; margin: 5px;">
-                    </div>
-        <p>
-            <b>Tablero 1</b>
-        </p>
-    </div>
+        <div class="main_image" style="background-image: url('<?=isset($rutas[0])?$rutas[0]:'';?>');">
+        </div>
+        <div class="second_image" style="background-image: url('<?=isset($rutas[1])?$rutas[1]:'';?>');">
+        </div>
+        <div class="second_image" style="background-image: url('<?=isset($rutas[2])?$rutas[2]:'';?>');">
+        </div>
+        <div class="second_image" style="background-image: url('<?=isset($rutas[3])?$rutas[3]:'';?>');">
+        </div>
+        <div class="board_title">
+            <b><a href="index.php?task=board&idBoard=<?=$board->get('board_id');?>&uid=<?=$userinfo[0]->get('user_id')?>"> <?=$board->get('name');?> </a></b>
+        </div>
     </div>
 
+
+    <?php
+    }
+    }
+    ?>
+    </div>
+</div>
+<div style="float: left; height: 1px; width: 100%; background-color: #2b303b;"></div>
+<div style="float: left; height: 1px; width: 100%; ">
+
+    <h3>Tableros que sigo</h3>
+    <ul>
+        <?php
+            foreach($boardFollows as $board){
+        ?>
+        <li>
+            <a href="index.php?task=board&idBoard=<?=$board->get('id_board');?>&uid=<?=$board->get('user_id');?>"> <?=$board->get('name');?> </a>
+        </li>
+        <?php
+            }
+        ?>
+    </ul>
 
 </div>
 
+
+
 <div id="form_add_board">
 
-    <form action="http://google.com" method="post" class="basic-grey">
+    <form action="index.php" method="post" class="basic-grey">
 
         <h1>A&ntilde;adir Tablero<span>Por favor llene todos los campos.</span></h1>
 
@@ -124,14 +176,20 @@ session_start();
             <label>
                 <span>Categor&iacute;a :</span>
                 <select name="category">
-                    <option value="0">Arte</option>
-                    <option value="1">Deportes</option>
+                    <?php
+                        foreach($categories as $category){
+                    ?>
+                     <option value="<?=$category->get('category_id')?>"><?=$category->get('name')?></option>
+                    <?php
+                        }
+                    ?>
                 </select>
             </label>
             <label>
                 <span>&nbsp;</span>
-                <input type="button" class="button" value="Crear Tablero">
+                <input type="submit" class="button" value="Crear Tablero">
                 <input type="hidden" name="task" value="addBoard">
+                <input type="hidden" name="uid" value="<?=$_SESSION['uid']?>">
             </label>
         </p>
     </form>
@@ -139,7 +197,7 @@ session_start();
 
 <div id="form_add_pin">
 
-    <form action="http://google.com" method="post" class="basic-grey">
+    <form action="index.php" method="post" class="basic-grey">
 
         <h1>A&ntilde;adir Pin<span>Por favor llene todos los campos.</span></h1>
 
@@ -149,28 +207,43 @@ session_start();
                 <span>Pin Web :</span>
                 <input type="text" id="img_web" name="img_web" placeholder="Pega la url">
             </label>
-            <label>
+           <!-- <label>
                 <span>Pin Local :</span>
                 <input type="file" id="img_local" name="img_local" placeholder="Selecciona">
-            </label>
+            </label>-->
             <label>
                 <span>Descripci&oacute;n :</span>
                 <textarea id="description" name="description" placeholder="Descripci&oacute;n"></textarea>
             </label>
             <label>
                 <span>Tablero :</span>
-                <select name="category">
-                    <option value="0">Tablero 1</option>
-                    <option value="1">Tablero 2</option>
+                <select name="id_board">
+                    <?php
+                    foreach($boards as $board){
+                    ?>
+                    <option value="<?=$board->get('board_id');?>"><?=$board->get('name');?></option>
+                    <?php
+                    }
+                    ?>
                 </select>
             </label>
             <label>
                 <span>&nbsp;</span>
-                <input type="button" class="button" value="Crear Pin">
+                <input type="submit" class="button" value="Crear Pin">
                 <input type="hidden" name="task" value="addPin">
+                <input type="hidden" name="uid" value="<?=$_SESSION['uid']?>">
             </label>
         </p>
     </form>
+</div>
+
+<div id="user_follows">
+    <?php
+        foreach($userFollows as $ufollow){
+            echo $ufollow->get('user').' '.$ufollow->get('lastname');
+            echo '<br />';
+        }
+    ?>
 </div>
 
 </body>

@@ -7,7 +7,6 @@
     <meta name="robots" content="noindex">
     <link rel="canonical" href="http://codepen.io/ehermanson/pen/KwKWEv">
     <link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="/assets/reset/normalize.css">
     <link rel="stylesheet" href="css/login_register.css">
 </head>
 
